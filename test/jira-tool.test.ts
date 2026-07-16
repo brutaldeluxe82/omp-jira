@@ -80,4 +80,9 @@ describe("JiraToolDispatcher", () => {
 			{ type: "paragraph", content: [{ type: "text", text: "ready", marks: [{ type: "strong" }] }] },
 		] } } }]);
 	});
+
+	it("rejects sub-task creation without a parent issue key before hitting the REST API", async () => {
+		const dispatcher = new JiraToolDispatcher(clientRecorder([]) as never);
+		await expect(dispatcher.execute({ op: "issue_create", project: "LF", issueType: "Sub-task", summary: "Orphan", confirm: true })).rejects.toThrow("parentIssueKey");
+	});
 });

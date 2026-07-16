@@ -76,9 +76,14 @@ export class JiraToolDispatcher {
 	}
 
 	private async create(input: JiraToolInput, signal?: AbortSignal): Promise<JiraToolResult> {
+		const issueType = input.issueType?.trim() || "Task";
+		const isSubtask = /sub-?task/i.test(issueType);
+		if (isSubtask && !input.parentIssueKey?.trim()) {
+			throw new Error(`Issue type '${issueType}' requires parentIssueKey. Read jira://${requireNonBlank(input.project, "project")}/issue-types to confirm the hierarchy level, then provide the parent issue key.`);
+		}
 		const fields: Record<string, unknown> = {
 			project: { key: requireNonBlank(input.project, "project") },
-			issuetype: { name: input.issueType?.trim() || "Task" },
+			issuetype: { name: issueType },
 			summary: requireNonBlank(input.summary, "summary"),
 		};
 		if (input.description?.trim()) fields.description = markdownToAdf(input.description);
