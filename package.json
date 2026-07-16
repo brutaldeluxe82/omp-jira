@@ -1,0 +1,22 @@
+{
+  "name": "@brutaldeluxe82/omp-jira",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Generic Jira issue, hierarchy, team, and operations support for Oh My Pi",
+  "license": "MIT",
+  "type": "module",
+  "omp": {
+    "extensions": ["./src/index.ts"]
+  },
+  "peerDependencies": {
+    "@oh-my-pi/pi-coding-agent": "16.5.2"
+  },
+  "devDependencies": {
+    "@oh-my-pi/pi-coding-agent": "16.5.2",
+    "@types/bun": "^1.3.14"
+  },
+  "scripts": {
+    "test": "bun test",
+    "check": "bunx tsc --noEmit"
+  }
+}
