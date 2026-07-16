@@ -1,3 +1,5 @@
+import { markdownToAdf as convertMarkdownToAdf } from "marklassian";
+
 
 export interface JiraConfig {
 	baseUrl: string;
@@ -43,13 +45,9 @@ export function assertIssueKey(value: string): string {
 	return key.toUpperCase();
 }
 
-export function textToAdf(text: string): AdfDocument {
-	const lines = text.replace(/\r\n/g, "\n").split("\n");
-	return {
-		type: "doc",
-		version: 1,
-		content: lines.map(line => ({ type: "paragraph", content: line ? [{ type: "text", text: line }] : [] })),
-	};
+/** Convert Markdown syntax into the rich-text ADF document Jira Cloud REST v3 requires. */
+export function markdownToAdf(markdown: string): AdfDocument {
+	return convertMarkdownToAdf(markdown);
 }
 
 export function renderAdf(document: unknown): string {

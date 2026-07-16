@@ -1,4 +1,4 @@
-import { assertIssueKey, JiraClient, textToAdf } from "./jira-client";
+import { assertIssueKey, JiraClient, markdownToAdf } from "./jira-client";
 
 export const JIRA_TOOL_OPS = ["issue_create", "issue_update", "issue_transition", "comment_create"] as const;
 
@@ -81,7 +81,7 @@ export class JiraToolDispatcher {
 			issuetype: { name: input.issueType?.trim() || "Task" },
 			summary: requireNonBlank(input.summary, "summary"),
 		};
-		if (input.description?.trim()) fields.description = textToAdf(input.description);
+		if (input.description?.trim()) fields.description = markdownToAdf(input.description);
 		if (input.priorityId?.trim()) fields.priority = { id: input.priorityId.trim() };
 		const labels = optionalLabels(input.labels);
 		if (labels) fields.labels = labels;
@@ -96,7 +96,7 @@ export class JiraToolDispatcher {
 		const issueKey = assertIssueKey(requireNonBlank(input.issueKey, "issueKey"));
 		const fields: Record<string, unknown> = {};
 		if (input.summary !== undefined) fields.summary = requireNonBlank(input.summary, "summary");
-		if (input.description !== undefined) fields.description = textToAdf(input.description);
+		if (input.description !== undefined) fields.description = markdownToAdf(input.description);
 		if (input.priorityId !== undefined) fields.priority = { id: requireNonBlank(input.priorityId, "priorityId") };
 		const labels = optionalLabels(input.labels);
 		if (labels) fields.labels = labels;
@@ -124,7 +124,7 @@ export class JiraToolDispatcher {
 
 	private async comment(input: JiraToolInput, signal?: AbortSignal): Promise<JiraToolResult> {
 		const issueKey = assertIssueKey(requireNonBlank(input.issueKey, "issueKey"));
-		await this.client.post<void>(`/rest/api/3/issue/${encodeURIComponent(issueKey)}/comment`, { body: textToAdf(requireNonBlank(input.comment, "comment")) }, signal);
+		await this.client.post<void>(`/rest/api/3/issue/${encodeURIComponent(issueKey)}/comment`, { body: markdownToAdf(requireNonBlank(input.comment, "comment")) }, signal);
 		return { content: `Added comment to Jira issue ${issueKey}.`, details: { op: input.op, issueKey } };
 	}
 }

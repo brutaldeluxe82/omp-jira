@@ -34,9 +34,9 @@ The token is read only from the process environment and never written to disk or
 | `issue_create` | `project`, `summary`, `confirm: true` | Creates an issue. `issueType` defaults to `Task`; accepts description, priority, labels, assignee account ID, parent key, and an optional `teamFieldId`/`teamId` pair. |
 | `issue_update` | `issueKey`, one mutable field, `confirm: true` | Atomically updates summary, description, priority, labels, assignee, parent, or an optional `teamFieldId`/`teamId` pair. |
 | `issue_transition` | `issueKey`, `transitionId` or `transitionName`, `confirm: true` | Performs an available transition. Name resolution is exact and refuses ambiguous results. |
-| `comment_create` | `issueKey`, `comment`, `confirm: true` | Adds a plain-text comment. |
+| `comment_create` | `issueKey`, `comment`, `confirm: true` | Adds a Markdown-rendered comment. |
 
-Descriptions and comments are converted into valid plain-text Atlassian Document Format (ADF). For richer structures, read the issue first and send an explicit update through a future ADF-specific operation; this initial surface deliberately avoids accepting unvalidated arbitrary documents.
+Descriptions and comments are parsed from Markdown into Jira Cloud REST v3's Atlassian Document Format (ADF). Headings, emphasis, inline code, links, lists, code blocks, blockquotes, rules, tables, and task lists render as rich content; raw HTML is not a supported formatting interface.
 
 Examples:
 
@@ -48,6 +48,12 @@ read 'jira://search?jql=project%20%3D%20PROJECT%20AND%20status%20!%3D%20Done&lim
 jira(op="issue_transition", issueKey="PROJECT-123", transitionName="Done", confirm=true)
 jira(op="issue_update", issueKey="PROJECT-123", labels=["platform", "retry"], confirm=true)
 jira(op="issue_update", issueKey="PROJECT-123", teamFieldId="customfield_12345", teamId="<team-uuid>", confirm=true)
+```
+
+Markdown is supported in `description` and `comment`:
+
+```text
+jira(op="comment_create", issueKey="PROJECT-123", comment="# Deployment\n\n**Status:** ready\n\n- verified\n- monitored", confirm=true)
 ```
 
 ## Install

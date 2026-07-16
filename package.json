@@ -1,8 +1,8 @@
 {
   "name": "@brutaldeluxe82/omp-jira",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
-  "description": "Generic Jira issue, hierarchy, team, and operations support for Oh My Pi",
+  "description": "Generic Jira Markdown, hierarchy, team, and operations support for Oh My Pi",
   "license": "MIT",
   "type": "module",
   "omp": {
@@ -18,5 +18,8 @@
   "scripts": {
     "test": "bun test",
     "check": "bunx tsc --noEmit"
+  },
+  "dependencies": {
+    "marklassian": "1.2.1"
   }
 }
