@@ -13,7 +13,7 @@ export default function jiraExtension(pi: ExtensionAPI): void {
 	pi.registerTool({
 		name: "jira",
 		label: "Jira",
-		description: "One op-based dispatcher for direct Jira Cloud REST API issue mutations. Pick the operation via op; each op uses a subset of the parameters. Supports creating, updating, transitioning, and commenting on issues. Reads use jira:// URI resources. Work-item creation and changes require confirm: true; Jira REST calls use JIRA_API_KEY directly, never acli.",
+		description: "Jira mutations: create, update, transition, and comment on issues. For reads, use jira://<ISSUE-KEY>, jira://<ISSUE-KEY>/transitions, jira://<ISSUE-KEY>/hierarchy, jira://<ISSUE-KEY>/comments, jira://<PROJECT>/issue-types, and jira://search?jql=<JQL> URIs — not this tool. Work-item changes require confirm: true.",
 		parameters: z.object({
 			op: z.enum(JIRA_TOOL_OPS).describe("Jira operation"),
 			issueKey: z.string().optional().describe("Jira issue key, for example PROJECT-123"),
