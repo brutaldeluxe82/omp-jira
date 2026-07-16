@@ -59,7 +59,7 @@ jira(op="comment_create", issueKey="PROJECT-123", comment="# Deployment\n\n**Sta
 ## Install
 
 ```sh
-omp install github:lemongrassconsulting/omp-jira
+omp install github:brutaldeluxe82/omp-jira
 ```
 
 Restart Oh My Pi after installing.
