@@ -21,15 +21,21 @@ function extensionApi(tools: string[]): never {
 afterEach(() => InternalUrlRouter.resetForTests());
 
 describe("Jira extension", () => {
-	it("registers one immutable jira:// handler and the jira dispatcher", () => {
+	it("replaces the immutable jira:// handler when extensions reload", () => {
 		const tools: string[] = [];
 		jiraExtension(extensionApi(tools));
 		const router = InternalUrlRouter.instance();
-		const handler = router.getHandler("jira");
+		const firstHandler = router.getHandler("jira");
 
-		expect(handler?.immutable).toBe(true);
+		expect(firstHandler?.immutable).toBe(true);
 		expect(tools).toEqual(["jira"]);
+
 		jiraExtension(extensionApi(tools));
-		expect(router.getHandler("jira")).toBe(handler);
+		const reloadedHandler = router.getHandler("jira");
+
+		expect(reloadedHandler).not.toBe(firstHandler);
+		expect(reloadedHandler?.immutable).toBe(true);
+		expect(tools).toEqual(["jira", "jira"]);
+		expect(router.getHandler("jira")).toBe(reloadedHandler);
 	});
 });

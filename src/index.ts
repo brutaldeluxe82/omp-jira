@@ -6,7 +6,7 @@ import { JiraToolDispatcher, JIRA_TOOL_OPS, type JiraToolInput } from "./jira-to
 /** Register read-only Jira URIs and confirmation-gated direct REST mutations. */
 export default function jiraExtension(pi: ExtensionAPI): void {
 	const router = InternalUrlRouter.instance();
-	if (!router.getHandler("jira")) router.register(new JiraProtocolHandler());
+	router.register(new JiraProtocolHandler());
 
 	const { z } = pi.zod;
 	const dispatcher = new JiraToolDispatcher();
