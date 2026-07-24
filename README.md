@@ -6,7 +6,7 @@ Oh My Pi extension providing immutable Jira Cloud REST API reads and one confirm
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `JIRA_API_KEY` | Yes | Atlassian API token. |
+| `JIRA_API_TOKEN` | Yes | Atlassian API token. `JIRA_API_KEY` is accepted as a legacy alias. |
 | `JIRA_EMAIL` | Yes | Email address associated with the API token. |
 | `JIRA_BASE_URL` | Yes | Jira Cloud site URL, for example `https://your-site.atlassian.net`. |
 

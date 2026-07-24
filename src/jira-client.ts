@@ -30,10 +30,12 @@ export interface AdfDocument {
 export type JiraFetch = typeof fetch;
 
 export function loadJiraConfig(environment: NodeJS.ProcessEnv = process.env): JiraConfig {
-	const apiKey = environment.JIRA_API_KEY;
+	// JIRA_API_TOKEN is the canonical Atlassian name ("API token" in the UI);
+	// JIRA_API_KEY is accepted as an alias for environment configurations that already use it.
+	const apiKey = environment.JIRA_API_TOKEN || environment.JIRA_API_KEY;
 	const baseUrl = environment.JIRA_BASE_URL?.replace(/\/$/, "");
 	const email = environment.JIRA_EMAIL;
-	if (!apiKey) throw new Error("JIRA_API_KEY is required. Create an Atlassian API token and expose it only through this environment variable.");
+	if (!apiKey) throw new Error("Jira authentication is not configured: set JIRA_API_TOKEN (or JIRA_API_KEY) to an Atlassian API token. Create one at https://id.atlassian.com/manage-profile/security/api-tokens and expose it only through this environment variable.");
 	if (!baseUrl) throw new Error("JIRA_BASE_URL is required, for example https://your-site.atlassian.net.");
 	if (!email) throw new Error("JIRA_EMAIL is required for Jira API token authentication.");
 	return { baseUrl, email, apiKey };
@@ -116,6 +118,9 @@ export class JiraClient {
 				// Jira occasionally returns plain text through a proxy.
 			}
 			const message = details?.errorMessages?.join("; ") || Object.entries(details?.errors ?? {}).map(([field, error]) => `${field}: ${error}`).join("; ") || details?.message || body.slice(0, 500) || response.statusText;
+			if (response.status === 401 || response.status === 403) {
+				throw new Error(`Jira authentication failed (${response.status}). Verify JIRA_EMAIL and JIRA_API_TOKEN (or JIRA_API_KEY) and that the token has not been revoked. Underlying response: ${message}`);
+			}
 			throw new Error(`Jira REST ${response.status}: ${message}`);
 		}
 		if (response.status === 204) return undefined as T;
