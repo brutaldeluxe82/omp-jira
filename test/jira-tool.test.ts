@@ -66,7 +66,16 @@ describe("JiraToolDispatcher", () => {
 
 		await dispatcher.execute({ op: "issue_update", issueKey: "PROJECT-123", teamFieldId: "customfield_12345", teamId: "00000000-0000-4000-8000-000000000001", confirm: true });
 
-		expect(calls).toEqual([{ method: "put", path: "/rest/api/3/issue/PROJECT-123", body: { fields: { customfield_12345: { id: "00000000-0000-4000-8000-000000000001" } } } }]);
+		expect(calls).toEqual([{ method: "put", path: "/rest/api/3/issue/PROJECT-123", body: { fields: { customfield_12345: "00000000-0000-4000-8000-000000000001" } } }]);
+	});
+
+	it("sets a team as a UUID string when creating an issue", async () => {
+		const calls: RecordedCall[] = [];
+		const dispatcher = new JiraToolDispatcher(clientRecorder(calls) as never);
+
+		await dispatcher.execute({ op: "issue_create", project: "PROJECT", summary: "Team issue", teamFieldId: "customfield_12345", teamId: "00000000-0000-4000-8000-000000000001", confirm: true });
+
+		expect(calls).toEqual([{ method: "post", path: "/rest/api/3/issue", body: { fields: { project: { key: "PROJECT" }, issuetype: { name: "Task" }, summary: "Team issue", customfield_12345: "00000000-0000-4000-8000-000000000001" } } }]);
 	});
 
 	it("posts Markdown comments as rendered Jira ADF", async () => {

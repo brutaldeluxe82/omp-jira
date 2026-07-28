@@ -54,7 +54,7 @@ function optionalLabels(labels: string[] | undefined): string[] | undefined {
 
 function applyTeamField(fields: Record<string, unknown>, input: JiraToolInput): void {
 	if (input.teamId === undefined && input.teamFieldId === undefined) return;
-	fields[requireNonBlank(input.teamFieldId, "teamFieldId")] = { id: requireNonBlank(input.teamId, "teamId") };
+	fields[requireNonBlank(input.teamFieldId, "teamFieldId")] = requireNonBlank(input.teamId, "teamId");
 }
 
 /** One confirmation-gated dispatcher for direct Jira issue mutations. */
