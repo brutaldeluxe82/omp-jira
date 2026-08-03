@@ -58,11 +58,7 @@ jira(op="comment_create", issueKey="PROJECT-123", comment="# Deployment\n\n**Sta
 
 ## Install
 
-```sh
-omp install github:brutaldeluxe82/omp-jira
-```
-
-Restart Oh My Pi after installing.
+In an agentic session, install this extension into the active Oh My Pi profile with `omp install github:brutaldeluxe82/omp-jira`. Restart Oh My Pi after installation so the `jira` tool and `jira://` resources are available.
 
 ## Verification
 
