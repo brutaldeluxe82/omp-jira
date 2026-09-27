@@ -49,7 +49,7 @@ describe("JiraProtocolHandler", () => {
 		const result = await handler.resolve(internalUrl("jira://PROJECT-123"));
 
 		expect(paths[0]).toContain("/rest/api/3/issue/PROJECT-123");
-		expect(handler.immutable).toBe(true);
+		expect(handler.spec.immutable).toBe(true);
 		expect(result.content).toContain("# PROJECT-123: Action retryability");
 		expect(result.content).toContain("Direct REST works.");
 	});

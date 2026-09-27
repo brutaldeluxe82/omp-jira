@@ -27,14 +27,14 @@ describe("Jira extension", () => {
 		const router = InternalUrlRouter.instance();
 		const firstHandler = router.getHandler("jira");
 
-		expect(firstHandler?.immutable).toBe(true);
+		expect(firstHandler?.spec.immutable).toBe(true);
 		expect(tools).toEqual(["jira"]);
 
 		jiraExtension(extensionApi(tools));
 		const reloadedHandler = router.getHandler("jira");
 
 		expect(reloadedHandler).not.toBe(firstHandler);
-		expect(reloadedHandler?.immutable).toBe(true);
+		expect(reloadedHandler?.spec.immutable).toBe(true);
 		expect(tools).toEqual(["jira", "jira"]);
 		expect(router.getHandler("jira")).toBe(reloadedHandler);
 	});

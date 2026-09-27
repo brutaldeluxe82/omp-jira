@@ -1,4 +1,4 @@
-import type { InternalResource, InternalUrl, ProtocolHandler, ResolveContext } from "@oh-my-pi/pi-coding-agent/internal-urls";
+import type { InternalResource, InternalUrl, ProtocolHandler, ResolveContext, SchemeSpec } from "@oh-my-pi/pi-coding-agent/internal-urls";
 import { assertIssueKey, JiraClient, renderAdf } from "./jira-client";
 
 const SEARCH_LIMIT_DEFAULT = 50;
@@ -133,7 +133,7 @@ function issueSummary(issue: JiraIssue): string {
 /** Immutable Jira issue resources backed directly by Jira Cloud REST API v3. */
 export class JiraProtocolHandler implements ProtocolHandler {
 	readonly scheme = "jira";
-	readonly immutable = true;
+	readonly spec: SchemeSpec = { backing: "remote", selectors: "lines", immutable: true };
 
 	constructor(private readonly client: JiraClient = new JiraClient()) {}
 
